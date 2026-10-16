@@ -12,20 +12,41 @@ class GameBoard:
         Initialize `board` as the adjacency matrix for the starting board.
         Use `Color.NONE` for edges that do not exist, and `Color.UNCOLORED` for the other edges.
         """
-        raise NotImplementedError
+
+        self.board: Board = [[Color.NONE if i == j else Color.UNCOLORED for j in range(NUM_NODES)]
+            for i in range(NUM_NODES)]
 
     def color_edge(self, edge: Edge, color: Color) -> None:
         """
         Update `board` to reflect coloring the given edge.
         """
-        raise NotImplementedError
+        u, v = edge
+        self.board[u][v] = color
+        self.board[v][u] = color
 
     def get_winner(self) -> Color | None:
         """
         Return the color of the player that has won (Color.P1 or Color.P2).
         If the game is still in progress (no one has won yet), return None.
         """
-        raise NotImplementedError
+        # Check all possible triangles formed by three nodes (i, j, k)
+        for i in range(NUM_NODES):
+            for j in range(i + 1, NUM_NODES):
+                for k in range(j + 1, NUM_NODES):
+                    c1 = self.board[i][j]
+                    c2 = self.board[j][k]
+                    c3 = self.board[k][i]
+
+                    # If all three edges are the same color, that player formed a triangle and lost
+                    if c1 == c2 == c3:
+                        if c1 == Color.P1:
+                            # P1 formed a red triangle so P2 wins
+                            return Color.P2
+                        elif c1 == Color.P2:
+                            # P2 formed a blue triangle so P1 wins
+                            return Color.P1
+
+        return None
 
     def __str__(self):
         """
