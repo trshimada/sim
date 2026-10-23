@@ -48,39 +48,33 @@ class Player2:
             if count == max_count_p2:
                 best_moves_p2.append(move)
 
-            # If there are multiple best moves for P2, sort them
-            if len(best_moves_p2) == 1:
-                return best_moves_p2[0]
-            elif len(best_moves_p2) > 1:
-                pass
+        if len(best_moves_p2) == 1:
+            return best_moves_p2[0]
 
-            # Consider the moves in the largest number of sets for moves P1 can make
-            max_p1_sets = Player2.get_maximal_allowed_sets(Color.P1, miniboard)
+        # Consider the moves in the largest number of sets in moves P1 can make
+        max_p1_sets = Player2.get_maximal_allowed_sets(Color.P1, miniboard)
 
-            move_counts_p1 = {}
-            for move in best_moves_p2:
-                count = 0
-                for s in max_p1_sets:
-                    if move in s or (move[1], move[0]) in s:
-                        count += 1
-                move_counts_p1[move] = count
+        move_counts_p1 = {}
+        for move in best_moves_p2:
+            count = 0
+            for s in max_p1_sets:
+                if move in s or (move[1], move[0]) in s:
+                    count += 1
+            move_counts_p1[move] = count
 
-            # Find the highest frequency count among P1 sets
-            max_count_p1 = -1
-            for count in move_counts_p1.values():
-                if count > max_count_p1:
-                    max_count_p1 = count
+        # Find the highest frequency count among P1 sets
+        max_count_p1 = -1
+        for count in move_counts_p1.values():
+            if count > max_count_p1:
+                max_count_p1 = count
 
-            # Gather best moves and sort and pick one
-            best_moves_p1 = []
-            for move, count in move_counts_p1.items():
-                if count == max_count_p1:
-                    best_moves_p1.append(move)
+        # Gather best moves and pick one
+        best_moves_p1 = []
+        for move, count in move_counts_p1.items():
+            if count == max_count_p1:
+                best_moves_p1.append(move)
 
-            if best_moves_p1:
-                return sorted(best_moves_p1)[0]
-
-            return sorted(best_moves_p2)[0]
+        return best_moves_p1[0] if best_moves_p1 else best_moves_p2[0]
 
     @staticmethod
     def get_miniboard(board: Board) -> Board | None:
