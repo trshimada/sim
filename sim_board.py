@@ -45,7 +45,7 @@ class GameBoard:
                         elif c1 == Color.P2:
                             # P2 formed a blue triangle so P1 wins
                             return Color.P1
-#
+
         return None
 
     def __str__(self):
